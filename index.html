@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boda Dammary y César</title>
+  
+  <!-- Tipografías de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --color-primary-purple: #4A2E6B;
+      --color-light-purple: #7B52AB;
+      --color-gold: #C5A059;
+      --color-gold-light: #E8D098;
+      --color-bg: #FAF7FC;
+      --color-text: #333333;
+      --font-script: 'Great Vibes', cursive;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1f122e;
+      font-family: var(--font-sans);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--color-text);
+      overflow: hidden;
+    }
+
+    /* Contenedor principal responsive */
+    .mobile-card {
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 850px;
+      background-color: var(--color-bg);
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    @media (min-width: 480px) {
+      .mobile-card {
+        border-radius: 24px;
+        height: 92vh;
+      }
+    }
+
+    /* Marcos y geometrías doradas */
+    .geometric-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .frame-overlay {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border: 1px solid var(--color-gold);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .frame-overlay::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+      border: 1px solid var(--color-gold-light);
+      opacity: 0.5;
+    }
+
+    /* Decoraciones florales en las esquinas */
+    .flower-decor {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      transition: opacity 0.6s ease;
+    }
+
+    .flower-top-left {
+      top: -50px;
+      left: -50px;
+      width: 350px;
+    }
+
+    .flower-bottom-right {
+      bottom: -50px;
+      right: -50px;
+      width: 350px;
+    }
+
+    /* Control de intensidad de flores según pantalla activa */
+    .mobile-card[data-screen="1"] .flower-decor {
+      opacity: 0.95;
+    }
+
+    .mobile-card:not([data-screen="1"]) .flower-decor {
+      opacity: 0.35; /* Más traslúcido en pantallas posteriores */
+    }
+
+    /* Sistema de Pantallas */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 60px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      transform: scale(0.96);
+      z-index: 1;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      z-index: 4;
+    }
+
+    /* Tipografías y textos */
+    .sub-heading {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--color-primary-purple);
+      font-size: 1.15rem;
+      margin-bottom: 15px;
+    }
+
+    .couple-names {
+      font-family: var(--font-script);
+      font-size: 3.6rem;
+      color: var(--color-gold);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+      line-height: 1.1;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      color: var(--color-primary-purple);
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .date-highlight {
+      font-family: var(--font-script);
+      font-size: 2.3rem;
+      color: var(--color-gold);
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: var(--color-primary-purple);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .bold-text {
+      font-weight: 600;
+    }
+
+    .gift-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-primary-purple);
+      font-family: var(--font-sans);
+      max-width: 320px;
+      margin: 15px auto;
+    }
+
+    .monogram {
+      font-family: var(--font-script);
+      font-size: 3rem;
+      color: var(--color-gold);
+      margin-top: 10px;
+    }
+
+    .date-sub {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      color: var(--color-light-purple);
+    }
+
+    .time-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin: 15px 0;
+      padding: 10px 0;
+      border-top: 1px solid var(--color-gold-light);
+      border-bottom: 1px solid var(--color-gold-light);
+    }
+
+    .time-box h4 {
+      font-size: 0.8rem;
+      color: var(--color-light-purple);
+      text-transform: uppercase;
+    }
+
+    .time-box p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-primary-purple);
+    }
+
+    /* Botones */
+    .btn {
+      background: linear-gradient(135deg, var(--color-gold), #A37F3E);
+      color: #FFF;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(197, 160, 89, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--color-gold);
+      color: var(--color-primary-purple);
+      box-shadow: none;
+    }
+
+    .btn-whatsapp {
+      background: hwb(281 6% 33%);
+      color: white;
+      box-shadow: 0 4px 10px hsla(268, 86%, 30%, 0.486);
+      width: 100%;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .btn-whatsapp:hover {
+      background: hwb(281 6% 9%);
+    }
+
+    .btn-home {
+      background: transparent;
+      border: 1px solid var(--color-primary-purple);
+      color: var(--color-primary-purple);
+      box-shadow: none;
+      margin-top: 12px;
+      padding: 8px 18px;
+      font-size: 0.75rem;
+    }
+
+    /* Navegación inferior */
+    .navigation-dots {
+      position: absolute;
+      bottom: 22px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      z-index: 5;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-gold-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot.active {
+      background-color: var(--color-gold);
+      width: 26px;
+      border-radius: 6px;
+    }
+
+    .detail-card {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px dashed var(--color-gold);
+      margin: 10px 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-card" id="cardContainer" data-screen="1">
+    <!-- Marco Rectangular Dorado -->
+    <div class="frame-overlay"></div>
+
+    <!-- Lineas Geométricas Doradas SVG de Fondo -->
+    <svg class="geometric-frame" viewBox="0 0 400 800" preserveAspectRatio="none">
+      <path d="M -50,150 L 200,-50 L 450,150" stroke="#C5A059" stroke-width="1" fill="none" opacity="0.4"/>
+      <path d="M -50,650 L 200,850 L 450,650" stroke="#C5A059" stroke-width="1" fill="none" opacity="0.4"/>
+      <path d="M 30,-20 L 420,700" stroke="#E8D098" stroke-width="0.8" fill="none" opacity="0.3"/>
+      <path d="M -20,100 L 380,820" stroke="#E8D098" stroke-width="0.8" fill="none" opacity="0.3"/>
+    </svg>
+
+    <!-- Ilustraciones Florales Moradas / Verdes SVG -->
+    <svg class="flower-decor flower-top-left" viewBox="0 0 200 200">
+      <g opacity="0.9">
+        <!-- Hojas verdes -->
+        <path d="M10,80 Q40,40 90,50 Q60,80 10,80 Z" fill="#4B6B52" opacity="0.8"/>
+        <path d="M60,10 Q90,40 80,90 Q50,60 60,10 Z" fill="#3D5A43" opacity="0.7"/>
+        <path d="M100,20 Q130,50 110,80 Q80,60 100,20 Z" fill="#6B8E72" opacity="0.8"/>
+        <!-- Flores Moradas -->
+        <circle cx="45" cy="45" r="32" fill="#4A2E6B"/>
+        <circle cx="35" cy="40" r="24" fill="#603A8B"/>
+        <circle cx="55" cy="50" r="20" fill="#7B52AB"/>
+        <circle cx="85" cy="35" r="22" fill="#583480"/>
+        <circle cx="80" cy="30" r="15" fill="#8E63C4"/>
+        <circle cx="30" cy="85" r="20" fill="#3A2054"/>
+        <!-- Detalles dorados -->
+        <circle cx="45" cy="45" r="6" fill="#C5A059"/>
+        <circle cx="85" cy="35" r="4" fill="#E8D098"/>
+      </g>
+    </svg>
+
+    <svg class="flower-decor flower-bottom-right" viewBox="0 0 200 200">
+      <g opacity="0.9" transform="rotate(180 100 100)">
+        <!-- Hojas verdes -->
+        <path d="M10,80 Q40,40 90,50 Q60,80 10,80 Z" fill="#4B6B52" opacity="0.8"/>
+        <path d="M60,10 Q90,40 80,90 Q50,60 60,10 Z" fill="#3D5A43" opacity="0.7"/>
+        <path d="M100,20 Q130,50 110,80 Q80,60 100,20 Z" fill="#6B8E72" opacity="0.8"/>
+        <!-- Flores Moradas -->
+        <circle cx="45" cy="45" r="32" fill="#4A2E6B"/>
+        <circle cx="35" cy="40" r="24" fill="#603A8B"/>
+        <circle cx="55" cy="50" r="20" fill="#7B52AB"/>
+        <circle cx="85" cy="35" r="22" fill="#583480"/>
+        <circle cx="80" cy="30" r="15" fill="#8E63C4"/>
+        <circle cx="30" cy="85" r="20" fill="#3A2054"/>
+        <!-- Detalles dorados -->
+        <circle cx="45" cy="45" r="6" fill="#C5A059"/>
+        <circle cx="85" cy="35" r="4" fill="#E8D098"/>
+      </g>
+    </svg>
+
+    <!-- PANTALLA 1: PORTADA -->
+    <div class="screen active" id="screen1">
+    <br>
+    <br>
+      <p class="sub-heading">Queremos compartir contigo<br>la felicidad de nuestra boda</p>
+    <br>
+      <h1 class="couple-names">Dammary<br>y César</h1>
+    <br>
+    <br>
+      <button class="btn" onclick="goToScreen(2)">
+        Ver Invitación <i class="fa-solid fa-envelope-open"></i>
+      </button>
+    <br>
+    <br>
+      <div class="monogram">D y C</div>
+      <div class="date-sub">09-10-2026</div>
+    <br>
+    <br>
+    </div>
+
+    <!-- PANTALLA 2: FECHA, HORARIOS Y UBICACIÓN -->
+    <div class="screen" id="screen2">
+      <div class="date-highlight">Viernes 09 de Octubre</div>
+      
+      <div class="time-container">
+        <div class="time-box">
+          <h4>Desde las</h4>
+          <p>16:00 hrs</p>
+        </div>
+        <div class="time-box">
+          <h4>Hasta las</h4>
+          <p>02:00 hrs</p>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <h3 class="section-title">Ceremonia</h3>
+        <p class="bold-text">Parroquia San Pedro Nolasco</p>
+        <p>Eyzaguirre 2773, Puente Alto</p>
+        <a href="https://maps.google.com/?q=Parroquia+San+Pedro+Nolasco+Eyzaguirre+2773+Puente+Alto" target="_blank" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.75rem; margin-top: 4px;">
+          <i class="fa-solid fa-location-dot"></i> Cómo llegar
+        </a>
+      </div>
+
+
+      <div style="margin-bottom: 10px;">
+        <h3 class="section-title">Celebración</h3>
+        <p class="bold-text">Espacio Mater</p>
+        <p>Independencia 466, Puente Alto</p>
+        <a href="https://maps.app.goo.gl/B5ZfrAVue28yeJ4o6" target="_blank" class="btn btn-outline" style="padding: 5px 12px; font-size: 0.75rem; margin-top: 4px;">
+          <i class="fa-solid fa-location-dot"></i> Cómo llegar
+        </a>
+      </div>
+
+      <button class="btn" onclick="goToScreen(3)">
+        Ver Detalles <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- PANTALLA 3: Detalles -->
+    <div class="screen" id="screen3">
+      <br>
+      <br>
+        <div class="detail-card">
+        <h3 class="section-title">Código de Vestimenta</h3>
+      <p class="bold-text" style="font-size: 1.5rem; color: var(--color-gold);">Vestimenta Formal</p>
+      <div class="time-container">
+        <p style="font-size: 0.85rem; margin-top: 4px;">Nota: Reservamos el blanco, beige y tonos crema para los novios. Rogamos evitar el rojo y derivados.</p>
+      </div>
+       <br>
+      <div class="detail-card">
+        <p class="bold-text"><i class="fa-solid fa-child-reaching">
+        </i> Evento sin Niños <i class="fa-solid fa-child-reaching"></i>
+        <p style="font-size: 0.85rem; margin-top: 4px;">Esta invitación reserva un espacio exclusivamente para ti.</p>
+      </div>
+      <button class="btn" onclick="goToScreen(4)" style="margin-top: 25px;">
+        Ten Presente <i class="fa-solid fa-arrow-right"></i>
+      </button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 4: PRESENTE Y RSVP -->
+    <div class="screen" id="screen4">
+        <div class="detail-card">
+      <div style="margin-bottom: 10px;">
+        <i class="fa-solid fa-envelope-open-text" style="font-size: 2rem; color: var(--color-gold);"></i>
+      </div>
+      <p class="gift-text">
+        Su presencia es nuestro mejor regalo, pero si desean hacernos un presente, les agradeceríamos que sea en efectivo. El día del evento dispondremos un buzón en donde recibiremos cada sobre.
+      </p>
+      </div>
+      <br>
+      <br>
+
+      <div style="margin-top: 8px; width: 100%;">
+        <p class="bold-text" style="font-size: 1.1rem; text-transform: uppercase; color: var(--color-gold);">
+          Favor confirmar asistencia<br>hasta el 5 de septiembre
+        </p>
+        <br>
+        <!-- Botones directos a WhatsApp -->
+        <a href="https://wa.me/56987706080?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda." target="_blank" class="btn btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> Confirmar con César
+        </a>
+        <a href="https://wa.me/56990576742?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda." target="_blank" class="btn btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> Confirmar con Dammary
+        </a>
+        <br>
+        <br>
+        <br>
+      </div>
+
+      <!-- Botón de retorno al inicio -->
+      <button class="btn btn-home" onclick="goToScreen(1)">
+        <i class="fa-solid fa-house"></i> Volver al Inicio
+      </button>
+    </div>
+
+    <!-- Indicadores de Navegación por Puntos -->
+    <div class="navigation-dots">
+      <span class="dot active" onclick="goToScreen(1)" title="Portada"></span>
+      <span class="dot" onclick="goToScreen(2)" title="Fecha y Lugar"></span>
+      <span class="dot" onclick="goToScreen(3)" title="Presente"></span>
+      <span class="dot" onclick="goToScreen(4)" title="Detalles"></span>
+    </div>
+  </div>
+
+  <script>
+    function goToScreen(screenNumber) {
+      // Actualizar atributo en contenedor para opacidad de flores
+      document.getElementById('cardContainer').setAttribute('data-screen', screenNumber);
+
+      // Ocultar todas las pantallas
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => screen.classList.remove('active'));
+
+      // Desactivar todos los puntos
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach(dot => dot.classList.remove('active'));
+
+      // Activar la pantalla requerida y su punto correspondiente
+      document.getElementById('screen' + screenNumber).classList.add('active');
+      dots[screenNumber - 1].classList.add('active');
+    }
+  </script>
+</body>
+</html>
